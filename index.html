@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <button type="button" id="subscribe">Следить за изменениями</button>
+</body>
+<script src="https://www.gstatic.com/firebasejs/5.3.1/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCsoGOHrN6zvRCtaZvow-H8RDP4unH8xZ8",
+    authDomain: "project-gilmon-id.firebaseapp.com",
+    databaseURL: "https://project-gilmon-id.firebaseio.com",
+    projectId: "project-gilmon-id",
+    storageBucket: "project-gilmon-id.appspot.com",
+    messagingSenderId: "823579918410"
+  };
+  firebase.initializeApp(config);
+</script>
+<script type="text/javascript" src="firebase_subscribe.js"></script>
+</html>
