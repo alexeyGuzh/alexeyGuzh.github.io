@@ -68,27 +68,3 @@ function setTokenSentToServer(currentToken) {
         currentToken ? currentToken : ''
     );
 }
-
-
-messaging.onMessage(function(payload) {
-    console.log('Message received. ', payload);
-    // регистрируем пустой ServiceWorker каждый раз
-    navigator.serviceWorker.register('firebase-messaging-sw.js');
-
-    // запрашиваем права на показ уведомлений если еще не получили их
-    Notification.requestPermission(function(result) {
-        if (result === 'granted') {
-            navigator.serviceWorker.ready.then(function(registration) {
-                // своя логика как в примере с TTL и т.д.
-
-                // копируем объект data
-                //console.log(payload)
-                //payload.data.data = JSON.parse(JSON.stringify(payload.data));
-
-                registration.showNotification(payload.data.title, payload.data);
-            }).catch(function(error) {
-                console.log('ServiceWorker registration failed', error);
-            });
-        }
-    });
-});
