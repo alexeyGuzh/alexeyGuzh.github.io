@@ -82,6 +82,7 @@ messaging.onMessage(function(payload) {
                 // своя логика как в примере с TTL и т.д.
 
                 // копируем объект data
+                console.log(payload.data)
                 payload.data.data = JSON.parse(JSON.stringify(payload.data));
 
                 registration.showNotification(payload.data.title, payload.data);
