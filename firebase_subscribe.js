@@ -24,15 +24,15 @@ function subscribe() {
                     console.log(currentToken);
 
                     if (currentToken) {
-                        //sendTokenToServer(currentToken);
+                        sendTokenToServer(currentToken);
                     } else {
                         console.warn('Не удалось получить токен.');
-                        //setTokenSentToServer(false);
+                        setTokenSentToServer(false);
                     }
                 })
                 .catch(function (err) {
                     console.warn('При получении токена произошла ошибка.', err);
-                    //setTokenSentToServer(false);
+                    setTokenSentToServer(false);
                 });
     })
     .catch(function (err) {
@@ -40,31 +40,31 @@ function subscribe() {
     });
 }
 
-// отправка ID на сервер
-// function sendTokenToServer(currentToken) {
-//     if (!isTokenSentToServer(currentToken)) {
-//         console.log('Отправка токена на сервер...');
-//
-//         var url = ''; // адрес скрипта на сервере который сохраняет ID устройства
-//         $.post(url, {
-//             token: currentToken
-//         });
-//
-//         setTokenSentToServer(currentToken);
-//     } else {
-//         console.log('Токен уже отправлен на сервер.');
-//     }
-// }
-//
-// // используем localStorage для отметки того,
-// // что пользователь уже подписался на уведомления
-// function isTokenSentToServer(currentToken) {
-//     return window.localStorage.getItem('sentFirebaseMessagingToken') == currentToken;
-// }
-//
-// function setTokenSentToServer(currentToken) {
-//     window.localStorage.setItem(
-//         'sentFirebaseMessagingToken',
-//         currentToken ? currentToken : ''
-//     );
-// }
+отправка ID на сервер
+function sendTokenToServer(currentToken) {
+    if (!isTokenSentToServer(currentToken)) {
+        console.log('Отправка токена на сервер...');
+
+        var url = 'https://project-gilmon-id.firebaseio.com'; // адрес скрипта на сервере который сохраняет ID устройства
+        $.post(url, {
+            token: currentToken
+        });
+
+        setTokenSentToServer(currentToken);
+    } else {
+        console.log('Токен уже отправлен на сервер.');
+    }
+}
+
+// используем localStorage для отметки того,
+// что пользователь уже подписался на уведомления
+function isTokenSentToServer(currentToken) {
+    return window.localStorage.getItem('sentFirebaseMessagingToken') == currentToken;
+}
+
+function setTokenSentToServer(currentToken) {
+    window.localStorage.setItem(
+        'sentFirebaseMessagingToken',
+        currentToken ? currentToken : ''
+    );
+}
