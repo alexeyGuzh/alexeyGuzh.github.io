@@ -42,12 +42,13 @@ function subscribe() {
 
 function sendTokenToServer(currentToken) {
     if (!isTokenSentToServer(currentToken)) {
-        console.log('Отправка токена на сервер...');
+        console.log('Отправка токена на сервер...', currentToken);
 
-        var url = 'https://project-gilmon-id.firebaseio.com'; // адрес скрипта на сервере который сохраняет ID устройства
+        /*var url = 'https://project-gilmon-id.firebaseio.com'; // адрес скрипта на сервере который сохраняет ID устройства
         $.post(url, {
             token: currentToken
-        });
+        });*/
+
 
         setTokenSentToServer(currentToken);
     } else {
