@@ -40,7 +40,6 @@ function subscribe() {
     });
 }
 
-отправка ID на сервер
 function sendTokenToServer(currentToken) {
     if (!isTokenSentToServer(currentToken)) {
         console.log('Отправка токена на сервер...');
