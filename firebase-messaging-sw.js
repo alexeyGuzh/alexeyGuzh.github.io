@@ -58,3 +58,14 @@ self.addEventListener('notificationclick', function(event) {
         return clients.openWindow(target);
     }));
 });
+
+messaging.setBackgroundMessageHandler(function(payload) {
+    console.log('Handling background message', payload);
+
+    // своя логика как в примере с TTL и т.д.
+
+    // копируем объект data
+    payload.data.data = JSON.parse(JSON.stringify(payload.data));
+
+    registration.showNotification(payload.data.title, payload.data);
+});

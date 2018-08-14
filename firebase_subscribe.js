@@ -3,6 +3,11 @@
 if ('Notification' in window) {
     var messaging = firebase.messaging();
 
+    messaging.onMessage(function(payload) {
+        console.log('Message received. ', payload);
+        new Notification(payload.notification.title, payload.notification);
+    });
+
     // пользователь уже разрешил получение уведомлений
     // подписываем на уведомления если ещё не подписали
     if (Notification.permission === 'granted') {
@@ -13,6 +18,32 @@ if ('Notification' in window) {
     // и подписываем его
     document.getElementById('subscribe').onclick = subscribe
 }
+
+messaging.onMessage(function(payload) {
+    console.log('Message received. ', payload);
+
+    // регистрируем пустой ServiceWorker каждый раз
+    navigator.serviceWorker.register('messaging-sw.js');
+
+    // запрашиваем права на показ уведомлений если еще не получили их
+    Notification.requestPermission(function(result) {
+        if (result === 'granted') {
+            navigator.serviceWorker.ready.then(function(registration) {
+                // теперь мы можем показать уведомление
+                return registration.showNotification(payload.notification.title, payload.notification);
+            }).catch(function(error) {
+                console.log('ServiceWorker registration failed', error);
+            });
+        }
+    });
+});
+
+navigator.serviceWorker.ready.then(function(registration) {
+    payload.notification.data = payload.notification; // параметры уведомления
+    registration.showNotification(payload.notification.title, payload.notification);
+}).catch(function(error) {
+    console.log('ServiceWorker registration failed', error);
+});
 
 function subscribe() {
     // запрашиваем разрешение на получение уведомлений
@@ -68,3 +99,49 @@ function setTokenSentToServer(currentToken) {
         currentToken ? currentToken : ''
     );
 }
+
+self.addEventListener('notificationclick', function(event) {
+    const target = event.notification.data.click_action || '/';
+    event.notification.close();
+
+    // этот код должен проверять список открытых вкладок и переключатся на открытую
+    // вкладку с ссылкой если такая есть, иначе открывает новую вкладку
+    event.waitUntil(clients.matchAll({
+        type: 'window',
+        includeUncontrolled: true
+    }).then(function(clientList) {
+        // clientList почему-то всегда пуст!?
+        for (var i = 0; i < clientList.length; i++) {
+            var client = clientList[i];
+            if (client.url == target && 'focus' in client) {
+                return client.focus();
+            }
+        }
+
+        // Открываем новое окно
+        return clients.openWindow(target);
+    }));
+});
+
+messaging.onMessage(function(payload) {
+    console.log('Message received. ', payload);
+
+    // регистрируем пустой ServiceWorker каждый раз
+    navigator.serviceWorker.register('firebase-messaging-sw.js');
+
+    // запрашиваем права на показ уведомлений если еще не получили их
+    Notification.requestPermission(function(result) {
+        if (result === 'granted') {
+            navigator.serviceWorker.ready.then(function(registration) {
+                // своя логика как в примере с TTL и т.д.
+
+                // копируем объект data
+                payload.data.data = JSON.parse(JSON.stringify(payload.data));
+
+                registration.showNotification(payload.data.title, payload.data);
+            }).catch(function(error) {
+                console.log('ServiceWorker registration failed', error);
+            });
+        }
+    });
+});
