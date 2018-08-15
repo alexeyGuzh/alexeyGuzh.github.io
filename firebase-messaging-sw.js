@@ -38,7 +38,7 @@ messaging.setBackgroundMessageHandler(function(payload) {
     // Показываем уведомление
     return self.registration.showNotification(payload.data.title, payload.data);
     payload.data.data = JSON.parse(JSON.stringify(payload.data));
- 
+
     registration.showNotification(payload.data.title, payload.data);
 });
 
@@ -65,12 +65,4 @@ self.addEventListener('notificationclick', function(event) {
         // Открываем новое окно
         return clients.openWindow(target);
     }));
-});
-
-
-navigator.serviceWorker.ready.then(function(registration) {
-    payload.notification.data = payload.notification; // параметры уведомления
-    registration.showNotification(payload.notification.title, payload.notification);
-}).catch(function(error) {
-    console.log('ServiceWorker registration failed', error);
 });
