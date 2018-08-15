@@ -80,12 +80,11 @@ messaging.onMessage(function(payload) {
     // запрашиваем права на показ уведомлений если еще не получили их
     Notification.requestPermission(function(result) {
         if (result === 'granted') {
-            console.log('тут' + payload.data)
             navigator.serviceWorker.ready.then(function(registration) {
                 // своя логика как в примере с TTL и т.д.
 
                 // копируем объект data
-                payload.data.data = JSON.parse(JSON.stringify(payload.data));
+                payload.data.data = JSON.parse(JSON.stringify(payload));
 
                 registration.showNotification(payload.data.title, payload.data);
             }).catch(function(error) {
