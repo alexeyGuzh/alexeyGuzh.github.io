@@ -9,6 +9,11 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.setBackgroundMessageHandler(function(payload) {
+
+   // своя логика как в примере с TTL и т.д.
+
+   // копируем объект data
+
     if (typeof payload.data.time != 'undefined') {
         var time = new Date(payload.data.time * 1000);
         var now = new Date();
@@ -32,6 +37,9 @@ messaging.setBackgroundMessageHandler(function(payload) {
 
     // Показываем уведомление
     return self.registration.showNotification(payload.data.title, payload.data);
+    payload.data.data = JSON.parse(JSON.stringify(payload.data));
+ 
+    registration.showNotification(payload.data.title, payload.data);
 });
 
 // свой обработчик клика по уведомлению
@@ -59,13 +67,10 @@ self.addEventListener('notificationclick', function(event) {
     }));
 });
 
-messaging.setBackgroundMessageHandler(function(payload) {
-    console.log('Handling background message', payload);
 
-    // своя логика как в примере с TTL и т.д.
-
-    // копируем объект data
-    payload.data.data = JSON.parse(JSON.stringify(payload.data));
-
-    registration.showNotification(payload.data.title, payload.data);
+navigator.serviceWorker.ready.then(function(registration) {
+    payload.notification.data = payload.notification; // параметры уведомления
+    registration.showNotification(payload.notification.title, payload.notification);
+}).catch(function(error) {
+    console.log('ServiceWorker registration failed', error);
 });
