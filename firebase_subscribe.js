@@ -1,4 +1,3 @@
-
 // вообще, эту проверку должна делать библиотека Firebase, но она этого не делает
 if ('Notification' in window) {
     var messaging = firebase.messaging();
@@ -106,9 +105,10 @@ messaging.onMessage(function(payload) {
                 payload.data.data = JSON.parse(JSON.stringify(payload.data));
 
                 registration.showNotification(payload.data.title, payload.data);
-            }).catch(function(error) {
-                console.log('ServiceWorker registration failed', error);
-            });
+            })
+            // .catch(function(error) {
+            //     console.log('ServiceWorker registration failed', error);
+            // });
         }
     });
 });
