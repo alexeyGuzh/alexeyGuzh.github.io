@@ -85,7 +85,7 @@ messaging.onMessage(function(payload) {
 
                 // копируем объект data
                 payload.data.data = JSON.parse(JSON.stringify(payload));
-
+                console.log(payload)
                 registration.showNotification(payload.data.title, payload.data);
             }).catch(function(error) {
                 console.log('ServiceWorker registration failed', error);
